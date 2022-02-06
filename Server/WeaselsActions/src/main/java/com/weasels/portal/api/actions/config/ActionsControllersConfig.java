@@ -1,4 +1,4 @@
-package com.weasels.portal.api.actions;
+package com.weasels.portal.api.actions.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
