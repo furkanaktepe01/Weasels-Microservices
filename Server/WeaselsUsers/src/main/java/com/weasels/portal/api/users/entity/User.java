@@ -1,4 +1,4 @@
-package com.weasels.portal.api.users.data;
+package com.weasels.portal.api.users.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
@@ -42,8 +45,6 @@ public class User implements Serializable {
 	private String lastName;
 	private String fullName;
 	private String sex;
-	private String title;
-	private String department;
 	private String nationality;
 	private String country;
 	private String address;
@@ -56,17 +57,35 @@ public class User implements Serializable {
 	private int salary;
 	private int remote;
 	private byte remainingPermissionDays;
+
+	@ManyToOne(cascade= { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinColumn(name="titleId")
+	private Title title;
 	
+	@ManyToOne(cascade= { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinColumn(name="teamId")
+	private Team team;
+	
+	@ManyToOne(cascade= { CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinColumn(name="missionId")
+	private Mission mission;
+
 	@Singular
 	// TODO: Review the Cascade Type
 	@ManyToMany(cascade=CascadeType.PERSIST) 
     @JoinTable( 
         name = "users_roles", 
         joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "_id"), 
+          name = "user_id", referencedColumnName = "userId"), 
         inverseJoinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id"))
+          name = "role_id", referencedColumnName = "roleId"))
 	private Collection<Authority> roles;
+	
+	
+	
 	
 
 }

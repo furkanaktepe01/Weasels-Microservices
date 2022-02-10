@@ -11,8 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import feign.Logger;
 
-@SpringBootApplication(scanBasePackages = {"com.weasels.portal.api.bootstrap",
-										   "com.weasels.portal.api.users.security"})
+@SpringBootApplication(scanBasePackages = {"com.weasels.portal.api"})
 @EnableDiscoveryClient
 public class WeaselsPortalApiUsersApplication {
 

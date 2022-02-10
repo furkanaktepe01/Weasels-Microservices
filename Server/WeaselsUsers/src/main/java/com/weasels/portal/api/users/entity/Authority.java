@@ -1,4 +1,4 @@
-package com.weasels.portal.api.users.data;
+package com.weasels.portal.api.users.entity;
 
 import java.util.Collection;
 

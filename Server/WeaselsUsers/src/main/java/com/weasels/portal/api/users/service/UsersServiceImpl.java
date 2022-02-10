@@ -10,10 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.weasels.portal.api.users.data.User;
-import com.weasels.portal.api.users.data.UsersRepository;
+import com.rabbitmq.client.RpcClient.Response;
+import com.weasels.portal.api.users.entity.User;
+import com.weasels.portal.api.users.repo.UsersRepository;
 import com.weasels.portal.api.users.shared.UserDto;
+import com.weasels.portal.api.users.ui.model.UpdateUserRequestModel;
+import com.weasels.portal.api.users.ui.model.UserResponseModel;
+import com.weasels.portal.api.utils.UserUtils;
 
 
 @Service
@@ -40,13 +45,10 @@ public class UsersServiceImpl implements UsersService {
 		logger.info("UsersServiceImpl creatUser(UserDto) before db insertion operation.");
 		
 		userDto.setUserId(UUID.randomUUID().toString());
-		// Later change this to actual date as opposed to String (varchar)
+		// Later change this to actual date as opposed to String
 		userDto.setEntranceDate(LocalDate.now().toString());
 		
-		String firstName = userDto.getFirstName();
-		String lastName = userDto.getLastName();
-		String fullName = firstName + " " + lastName;
-		userDto.setFullName(fullName);
+		userDto.setFullName(UserUtils.makeFullName(userDto));
 		
 		userDto.setPassword(userDto.getUserId().substring(0, 8));
 		
@@ -108,6 +110,25 @@ public class UsersServiceImpl implements UsersService {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(user, UserDto.class);
 		
+	}
+
+	@Override
+	public UserDto updateUser(String id, UpdateUserRequestModel updatedUser) {
+
+		ModelMapper mapper = new ModelMapper();
+		User user = usersRepository.findByUserId(id);
+
+		User upToDateUser = mapper.map(updatedUser, User.class);
+		upToDateUser.setTitle(user.getTitle());
+		upToDateUser.setSalary(user.getSalary());
+		upToDateUser.setRemainingPermissionDays(user.getRemainingPermissionDays());
+		
+//		User upToDateUser = usersRepository.save(mapper.map(updatedUser, User.class));
+		
+		
+		return mapper.map(upToDateUser, UserDto.class);
+		
+
 	}
 
 }

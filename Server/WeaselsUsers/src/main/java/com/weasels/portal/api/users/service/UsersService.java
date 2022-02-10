@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.weasels.portal.api.users.shared.UserDto;
+import com.weasels.portal.api.users.ui.model.UpdateUserRequestModel;
 
 public interface UsersService {
 
@@ -14,6 +15,8 @@ public interface UsersService {
 	List<UserDto> findUsers();
 	
 	UserDto findUser(String id);
+	
+	UserDto updateUser(String id, UpdateUserRequestModel user);
 
 	
 }

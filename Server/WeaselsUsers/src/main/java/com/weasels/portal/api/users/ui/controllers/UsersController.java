@@ -26,6 +26,7 @@ import com.weasels.portal.api.users.service.UsersService;
 import com.weasels.portal.api.users.shared.UserDto;
 import com.weasels.portal.api.users.ui.model.CreateUserRequestModel;
 import com.weasels.portal.api.users.ui.model.CreateUserResponseModel;
+import com.weasels.portal.api.users.ui.model.UpdateUserRequestModel;
 import com.weasels.portal.api.users.ui.model.UserResponseModel;
 
 @RestController
@@ -73,7 +74,7 @@ public class UsersController {
 												.stream()
 												.map(user -> modelMapper.map(user, UserResponseModel.class))
 												.collect(Collectors.toList());
-		
+	
 		return ResponseEntity.status(HttpStatus.OK).body(returnUsers);
 	}
 	
@@ -90,13 +91,8 @@ public class UsersController {
 	}
 	
 	@PutMapping("/{user_id}")
-	public UserDto updateUser(@RequestBody UserDto user) {
-		
-		UserDto userFromDatabase = usersService.findUser(user.getUserId());
-		
-		
-		
-		return null;
+	public UserDto updateUser(@PathVariable String user_id, @RequestBody UpdateUserRequestModel user) {	
+		return usersService.updateUser(user_id, user);
 	}
 	
 	
